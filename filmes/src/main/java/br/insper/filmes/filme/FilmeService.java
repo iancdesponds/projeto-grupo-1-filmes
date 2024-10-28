@@ -3,6 +3,8 @@ package br.insper.filmes.filme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Optional;
 
@@ -53,6 +55,11 @@ public class FilmeService {
         Filme filmeDeletado = op.get();
         filmeRepository.deleteById(id);
         return filmeDeletado;
+    }
+
+    public ArrayList<Filme> ListarFilmes(String genero, Integer ano, String nomeDiretor, String classificacao){
+
+
     }
 
 }
