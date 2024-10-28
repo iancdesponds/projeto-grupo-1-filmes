@@ -1,15 +1,33 @@
 package br.insper.filmes.filme;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import java.util.UUID;
 import java.util.Optional;
 
 @Service
-public class FilmeService{
+public class FilmeService {
 
     @Autowired
-    private  FilmeRepository filmeRepository;
+    private FilmeRepository filmeRepository;
+
+    public Filme CriarFilme(Filme filme) {
+        if (filme == null) {
+            throw new IllegalArgumentException("Filme não pode ser nulo");
+        }
+
+        if (filme.getTitulo() == null || filme.getAtores() == null || filme.getClassificacao() == null || filme.getDescricao() == null || filme.getDiretores() == null || filme.getGenero() == null || filme.getAno() == null) {
+            throw new IllegalArgumentException("Campos obrigatórios estão ausentes");
+        }
+
+        filme.setId(UUID.randomUUID().toString());
+
+        return filmeRepository.save(filme);
+
+
+    }
+
 
     public Filme EditarFilme(Filme filme, String id){
         Optional<Filme> op = filmeRepository.findById(id);
