@@ -1,4 +1,6 @@
 package br.insper.filmes.filme;
 
-public interface FilmeRepository {
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface FilmeRepository extends MongoRepository<Filme, String> {
 }
