@@ -1,4 +1,8 @@
 package br.insper.filmes.diretor;
 
-public interface DiretorRepository {
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface DiretorRepository extends MongoRepository<Diretor, Integer> {
 }
