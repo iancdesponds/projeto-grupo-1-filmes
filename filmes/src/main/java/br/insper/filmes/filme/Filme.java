@@ -1,5 +1,7 @@
 package br.insper.filmes.filme;
 
+import br.insper.filmes.ator.Ator;
+import br.insper.filmes.diretor.Diretor;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
