@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AtorService {
@@ -14,11 +15,12 @@ public class AtorService {
 
     public Ator criarAtor(Ator ator) {
         validarAtor(ator);
+        ator.setId(UUID.randomUUID().toString());
         return atorRepository.save(ator);
     }
 
-    public Optional<Ator> buscarAtorPorId(Integer id) {
-        if (id == null || id < 1) {
+    public Optional<Ator> buscarAtorPorId(String id) {
+        if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("ID inválido.");
         }
         return atorRepository.findById(id);
@@ -28,7 +30,7 @@ public class AtorService {
         return atorRepository.findAll();
     }
 
-    public Optional<Ator> atualizarAtor(Integer id, Ator ator) {
+    public Optional<Ator> atualizarAtor(String id, Ator ator) {
         validarAtor(ator);
         if (atorRepository.existsById(id)) {
             ator.setId(id);
@@ -38,8 +40,8 @@ public class AtorService {
         }
     }
 
-    public boolean deletarAtor(Integer id) {
-        if (id == null || id < 1) {
+    public boolean deletarAtor(String id) {
+        if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("ID inválido.");
         }
         if (atorRepository.existsById(id)) {

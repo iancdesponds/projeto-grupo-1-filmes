@@ -21,7 +21,7 @@ public class AtorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ator> buscarAtorPorId(@PathVariable("id") Integer id) {
+    public ResponseEntity<Ator> buscarAtorPorId(@PathVariable("id") String id) {
         Optional<Ator> ator = atorService.buscarAtorPorId(id);
         return ator.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -33,14 +33,14 @@ public class AtorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Ator> atualizarAtor(@PathVariable("id") Integer id, @Validated @RequestBody Ator ator) {
+    public ResponseEntity<Ator> atualizarAtor(@PathVariable("id") String id, @Validated @RequestBody Ator ator) {
         Optional<Ator> atorAtualizado = atorService.atualizarAtor(id, ator);
         return atorAtualizado.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarAtor(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deletarAtor(@PathVariable("id") String id) {
         if (atorService.deletarAtor(id)) {
             return ResponseEntity.ok().build();
         } else {
