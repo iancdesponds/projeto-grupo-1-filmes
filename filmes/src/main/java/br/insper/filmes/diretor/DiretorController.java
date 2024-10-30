@@ -22,7 +22,7 @@ public class DiretorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Diretor> buscarDiretorPorId(@PathVariable("id") Integer id) {
+    public ResponseEntity<Diretor> buscarDiretorPorId(@PathVariable("id") String id) {
         Optional<Diretor> diretor = diretorService.buscarDiretorPorId(id);
         return diretor.map(ResponseEntity::ok)
                       .orElseGet(() -> ResponseEntity.notFound().build());
@@ -34,14 +34,14 @@ public class DiretorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Diretor> atualizarDiretor(@PathVariable("id") Integer id, @Validated @RequestBody Diretor diretor) {
+    public ResponseEntity<Diretor> atualizarDiretor(@PathVariable("id") String id, @Validated @RequestBody Diretor diretor) {
         Optional<Diretor> diretorAtualizado = diretorService.atualizarDiretor(id, diretor);
         return diretorAtualizado.map(ResponseEntity::ok)
                                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarDiretor(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deletarDiretor(@PathVariable("id") String id) {
         if (diretorService.deletarDiretor(id)) {
             return ResponseEntity.ok().build();
         } else {
