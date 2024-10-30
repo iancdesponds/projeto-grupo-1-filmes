@@ -1,34 +1,46 @@
 package br.insper.filmes.filme;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
+@RequestMapping("/filmes")
 public class FilmeController {
 
     @Autowired
     private FilmeService filmeService;
 
-
-    @PostMapping("/filme")
-    public Filme CriarFilme(@RequestBody Filme filme) { return filmeService.CriarFilme(filme);
+    @PostMapping
+    public Filme criarFilme(@RequestBody Filme filme) {
+        return filmeService.criarFilme(filme);
     }
 
-
-    @PutMapping("/filme/{id}")
-    public Filme EditarFilme(@RequestBody Filme filme, @PathVariable String id){
-        return filmeService.EditarFilme(filme, id);
+    @PutMapping("/{id}")
+    public Filme editarFilme(@RequestBody Filme filme, @PathVariable String id) {
+        return filmeService.editarFilme(filme, id);
     }
 
-    @DeleteMapping("/filme/{id}")
-    public Filme DeletarFilme(@PathVariable String id){
-        return filmeService.DeletarFilme(id);
+    @DeleteMapping("/{id}")
+    public Filme deletarFilme(@PathVariable String id) {
+        return filmeService.deletarFilme(id);
     }
 
-    @GetMapping("/filme")
-    public List<Filme> getFilme(@RequestParam(required = false) String genero, @RequestParam(required = false) Integer ano, @RequestParam(required = false) String classificacao, @RequestParam(required = false) String nomdDiretor) {
-        return filmeService.ListarFilmes(genero, ano, nomdDiretor, classificacao);
+    @GetMapping
+    public List<Filme> listarFilmes(
+            @RequestParam(required = false) String genero,
+            @RequestParam(required = false) Integer ano,
+            @RequestParam(required = false) String classificacao,
+            @RequestParam(required = false) String nomeDiretor) {
+        return filmeService.listarFilmes(genero, ano, nomeDiretor, classificacao);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Filme> buscarFilmePorId(@PathVariable String id) {
+        Optional<Filme> filme = filmeService.buscarFilmePorId(id);
+        return filme.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
