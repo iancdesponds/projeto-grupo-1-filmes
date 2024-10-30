@@ -19,8 +19,8 @@ public class Filme {
 
     private String classificacao;
 
-    private ArrayList<Diretor> diretores;
-    private ArrayList<Ator> atores;
+    private ArrayList<String> diretores;
+    private ArrayList<String> atores;
 
 
     public Filme() {
@@ -85,19 +85,19 @@ public class Filme {
         this.classificacao = classificacao;
     }
 
-    public ArrayList<Diretor> getDiretores() {
+    public ArrayList<String> getDiretores() {
         return diretores;
     }
 
-    public void setDiretores(ArrayList<Diretor> diretores) {
+    public void setDiretores(ArrayList<String> diretores) {
         this.diretores = diretores;
     }
 
-    public ArrayList<Ator> getAtores() {
+    public ArrayList<String> getAtores() {
         return atores;
     }
 
-    public void setAtores(ArrayList<Ator> atores) {
+    public void setAtores(ArrayList<String> atores) {
         this.atores = atores;
     }
 }

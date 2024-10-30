@@ -4,7 +4,6 @@ import java.util.List;
 import br.insper.filmes.filme.Filme;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 @Document
 public class Diretor {
     @Id

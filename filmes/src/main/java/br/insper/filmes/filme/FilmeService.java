@@ -1,6 +1,8 @@
 package br.insper.filmes.filme;
 
+import br.insper.filmes.ator.AtorRepository;
 import br.insper.filmes.diretor.Diretor;
+import br.insper.filmes.diretor.DiretorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -9,12 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class FilmeService {
 
     @Autowired
     private FilmeRepository filmeRepository;
+
+    @Autowired
+    private DiretorRepository diretorRepository;
+
+    @Autowired
+    private AtorRepository atorRepository;
 
     public Filme CriarFilme(Filme filme) {
         if (filme == null) {
@@ -24,6 +33,13 @@ public class FilmeService {
         if (filme.getTitulo() == null || filme.getAtores() == null || filme.getClassificacao() == null || filme.getDescricao() == null || filme.getDiretores() == null || filme.getGenero() == null || filme.getAno() == null) {
             throw new IllegalArgumentException("Campos obrigatórios estão ausentes");
         }
+
+        for( String diretor : filme.getDiretores()){
+            if(diretorRepository.findById(diretor).isEmpty()){
+                throw new IllegalArgumentException("Diretor não encontrado");
+            }
+        }
+
 
         filme.setId(UUID.randomUUID().toString());
 
@@ -59,49 +75,25 @@ public class FilmeService {
         return filmeDeletado;
     }
 
-    public ArrayList<Filme> ListarFilmes(String genero, Integer ano, String nomeDiretor, String classificacao) {
-        List<Filme> filmes = filmeRepository.findAll();
+    public List<Filme> ListarFilmes(String genero, Integer ano, String nomeDiretor, String classificacao) {
         ArrayList<Filme> filmesFiltrados = new ArrayList<>();
-
-        for (Filme filme : filmes) {
-            boolean adicionar = true;
-
-            // Verifica o filtro de gênero
-            if (genero != null && !filme.getGenero().equalsIgnoreCase(genero)) {
-                adicionar = false;
-            }
-
-            // Verifica o filtro de ano
-            if (ano != null && !filme.getAno().equals(ano)) {
-                adicionar = false;
-            }
-
-            // Verifica o filtro de diretor
-            if (nomeDiretor != null) {
-                boolean diretorEncontrado = false;
-                for (Diretor diretor : filme.getDiretores()) {
-                    if (diretor.getNome().equalsIgnoreCase(nomeDiretor)) {
-                        diretorEncontrado = true;
-                        break;
-                    }
-                }
-                if (!diretorEncontrado) {
-                    adicionar = false;
-                }
-            }
-
-            // Verifica o filtro de classificação
-            if (classificacao != null && !filme.getClassificacao().equalsIgnoreCase(classificacao)) {
-                adicionar = false;
-            }
-
-            // Adiciona o filme à lista final se todos os filtros foram atendidos
-            if (adicionar) {
-                filmesFiltrados.add(filme);
-            }
+        Stream<Filme> filmes = filmesFiltrados.stream();
+        if (genero != null) {
+            filmes = filmes.filter(filme -> filme.getGenero().equals(genero));
+        }
+        if (ano != null) {
+            filmes = filmes.filter(filme -> filme.getAno().equals(ano));
+        }
+        if (nomeDiretor != null) {
+            filmes = filmes.filter(filme -> filme.getDiretores().stream().anyMatch(diretor -> diretor.getNome().equals(nomeDiretor)));
+        }
+        if (classificacao != null) {
+            filmes = filmes.filter(filme -> filme.getClassificacao().equals(classificacao));
         }
 
-        return filmesFiltrados;
+
+
+        return filmes.toList();
     }
 
 }

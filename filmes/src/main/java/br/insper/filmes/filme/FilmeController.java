@@ -3,6 +3,8 @@ package br.insper.filmes.filme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class FilmeController {
 
@@ -15,7 +17,7 @@ public class FilmeController {
     }
 
 
-    @PostMapping("/filme/{id}")
+    @PutMapping("/filme/{id}")
     public Filme EditarFilme(@RequestBody Filme filme, @PathVariable String id){
         return filmeService.EditarFilme(filme, id);
     }
@@ -25,4 +27,8 @@ public class FilmeController {
         return filmeService.DeletarFilme(id);
     }
 
+    @GetMapping("/filme")
+    public List<Filme> getFilme(@RequestParam(required = false) String genero, @RequestParam(required = false) Integer ano, @RequestParam(required = false) String classificacao, @RequestParam(required = false) String nomdDiretor) {
+        return filmeService.ListarFilmes(genero, ano, nomdDiretor, classificacao);
+    }
 }
