@@ -1,10 +1,8 @@
 package br.insper.filmes.filme;
 
 import br.insper.filmes.ator.AtorRepository;
-import br.insper.filmes.diretor.Diretor;
 import br.insper.filmes.diretor.DiretorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,7 +23,7 @@ public class FilmeService {
     @Autowired
     private AtorRepository atorRepository;
 
-    public Filme CriarFilme(Filme filme) {
+    public Filme criarFilme(Filme filme) {
         if (filme == null) {
             throw new IllegalArgumentException("Filme não pode ser nulo");
         }
@@ -40,16 +38,18 @@ public class FilmeService {
             }
         }
 
-
         filme.setId(UUID.randomUUID().toString());
-
         return filmeRepository.save(filme);
-
-
     }
 
+    public Optional<Filme> buscarFilmePorId(String id) {
+        if (id == null || id.isEmpty()) {
+            throw new IllegalArgumentException("ID inválido.");
+        }
+        return filmeRepository.findById(id);
+    }
 
-    public Filme EditarFilme(Filme filme, String id){
+    public Filme editarFilme(Filme filme, String id){
         Optional<Filme> op = filmeRepository.findById(id);
         if (op.isEmpty()) {
             throw new IllegalArgumentException("Filme não encontrado");
@@ -65,7 +65,7 @@ public class FilmeService {
         return filmeRepository.save(filmeEditado);
     }
 
-    public Filme DeletarFilme(String id){
+    public Filme deletarFilme(String id){
         Optional<Filme> op = filmeRepository.findById(id);
         if (op.isEmpty()) {
             throw new RuntimeException("Filme não encontrado");
@@ -75,7 +75,7 @@ public class FilmeService {
         return filmeDeletado;
     }
 
-    public List<Filme> ListarFilmes(String genero, Integer ano, String nomeDiretor, String classificacao) {
+    public List<Filme> listarFilmes(String genero, Integer ano, String nomeDiretor, String classificacao) {
         ArrayList<Filme> filmesFiltrados = new ArrayList<>();
         Stream<Filme> filmes = filmesFiltrados.stream();
         if (genero != null) {
@@ -90,10 +90,6 @@ public class FilmeService {
         if (classificacao != null) {
             filmes = filmes.filter(filme -> filme.getClassificacao().equals(classificacao));
         }
-
-
-
         return filmes.toList();
     }
-
 }
