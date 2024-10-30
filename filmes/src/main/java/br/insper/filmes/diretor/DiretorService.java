@@ -1,11 +1,13 @@
 package br.insper.filmes.diretor;
 
+import br.insper.filmes.ator.Ator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class DiretorService {
@@ -15,11 +17,12 @@ public class DiretorService {
 
     public Diretor criarDiretor(Diretor diretor) {
         validarDiretor(diretor);
+        diretor.setId(UUID.randomUUID().toString());
         return diretorRepository.save(diretor);
     }
 
-    public Optional<Diretor> buscarDiretorPorId(Integer id) {
-        if (id == null || id < 1) {
+    public Optional<Diretor> buscarDiretorPorId(String id) {
+        if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("ID inválido.");
         }
         return diretorRepository.findById(id);
@@ -29,7 +32,7 @@ public class DiretorService {
         return diretorRepository.findAll();
     }
 
-    public Optional<Diretor> atualizarDiretor(Integer id, Diretor diretor) {
+    public Optional<Diretor> atualizarDiretor(String id, Diretor diretor) {
         validarDiretor(diretor);
         if (diretorRepository.existsById(id)) {
             diretor.setId(id);
@@ -39,8 +42,8 @@ public class DiretorService {
         }
     }
 
-    public boolean deletarDiretor(Integer id) {
-        if (id == null || id < 1) {
+    public boolean deletarDiretor(String id) {
+        if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("ID inválido.");
         }
         if (diretorRepository.existsById(id)) {
