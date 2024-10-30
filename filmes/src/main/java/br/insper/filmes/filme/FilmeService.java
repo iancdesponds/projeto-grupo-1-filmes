@@ -85,7 +85,7 @@ public class FilmeService {
             filmes = filmes.filter(filme -> filme.getAno().equals(ano));
         }
         if (nomeDiretor != null) {
-            filmes = filmes.filter(filme -> filme.getDiretores().stream().anyMatch(diretor -> diretor.getNome().equals(nomeDiretor)));
+            filmes = filmes.filter(filme -> filme.getDiretores().stream().anyMatch(diretor -> diretor.equals(nomeDiretor)));
         }
         if (classificacao != null) {
             filmes = filmes.filter(filme -> filme.getClassificacao().equals(classificacao));
