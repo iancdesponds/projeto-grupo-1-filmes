@@ -2,9 +2,12 @@ package br.insper.filmes.diretor;
 
 import java.util.List;
 import br.insper.filmes.filme.Filme;
+import org.springframework.data.annotation.Id;
 
 public class Diretor {
-    private Integer id;
+
+    @Id
+    private String id;
     private String nome;
     private String nacionalidade;
     private String biografia;
