@@ -2,8 +2,13 @@ package br.insper.filmes.filme;
 
 import br.insper.filmes.diretor.Diretor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import br.insper.filmes.avaliacao.Avaliacao;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +20,23 @@ public class FilmeService {
 
     @Autowired
     private FilmeRepository filmeRepository;
+
+    public List<Avaliacao> ListarAvaliacoes(String id, String jwtToken) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + jwtToken);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<Avaliacao[]> response = restTemplate.exchange("http://localhost:8080/avaliacao/filme/" +
+                id, HttpMethod.GET, entity, Avaliacao[].class);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return List.of(response.getBody());
+        } else {
+            throw new RuntimeException("Erro ao buscar avaliações");
+        }
+    }
 
     public Filme CriarFilme(Filme filme) {
         if (filme == null) {
