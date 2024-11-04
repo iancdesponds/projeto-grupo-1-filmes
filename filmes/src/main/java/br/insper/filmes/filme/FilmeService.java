@@ -41,7 +41,7 @@ public class FilmeService {
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<Avaliacao[]> response = restTemplate.exchange("http://localhost:8080/avaliacao/filme/" +
+        ResponseEntity<Avaliacao[]> response = restTemplate.exchange("http://54.81.167.84:8080/avaliacao?filme=" +
                 id, HttpMethod.GET, entity, Avaliacao[].class);
 
         if (response.getStatusCode().is2xxSuccessful()) {
