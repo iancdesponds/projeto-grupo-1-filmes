@@ -1,8 +1,11 @@
 package br.insper.filmes.ator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,7 +24,7 @@ public class AtorService {
 
     public Optional<Ator> buscarAtorPorId(String id) {
         if (id == null || id.isEmpty()) {
-            throw new IllegalArgumentException("ID inválido.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id invalido");
         }
         return atorRepository.findById(id);
     }
@@ -42,7 +45,7 @@ public class AtorService {
 
     public boolean deletarAtor(String id) {
         if (id == null || id.isEmpty()) {
-            throw new IllegalArgumentException("ID inválido.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id inválido");
         }
         if (atorRepository.existsById(id)) {
             atorRepository.deleteById(id);
@@ -53,13 +56,13 @@ public class AtorService {
 
     private void validarAtor(Ator ator) {
         if (!StringUtils.hasText(ator.getNome()) || ator.getNome().length() > 100) {
-            throw new IllegalArgumentException("Nome inválido ou muito longo.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome inválido ou muito longo.");
         }
         if (!StringUtils.hasText(ator.getNacionalidade()) || ator.getNacionalidade().length() > 50) {
-            throw new IllegalArgumentException("Nacionalidade inválida ou muito longa.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome inválido ou muito longo.");
         }
         if (ator.getFilmes() == null) {
-            throw new IllegalArgumentException("A lista de filmes não pode ser nula.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A lista de filmes não pode ser nula.");
         }
     }
 }
