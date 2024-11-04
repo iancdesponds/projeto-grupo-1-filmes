@@ -39,8 +39,7 @@ public class FilmeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Filme> buscarFilmePorId(@PathVariable String id) {
-        Optional<Filme> filme = filmeService.buscarFilmePorId(id);
-        return filme.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public Filme buscarFilmePorId(@PathVariable String id) {
+        return filmeService.buscarFilmePorId(id);
     }
 }
