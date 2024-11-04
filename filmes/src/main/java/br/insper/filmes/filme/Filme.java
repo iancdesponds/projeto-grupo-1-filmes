@@ -1,8 +1,5 @@
 package br.insper.filmes.filme;
 
-import br.insper.filmes.ator.Ator;
-import br.insper.filmes.diretor.Diretor;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,14 +16,14 @@ public class Filme {
 
     private String classificacao;
 
-    private ArrayList<Diretor> diretores;
-    private ArrayList<Ator> atores;
+    private ArrayList<String> diretores;
+    private ArrayList<String> atores;
 
 
     public Filme() {
     }
 
-    public Filme(String id, String titulo, String descricao, String genero, Integer ano, String classificacao, ArrayList<Diretor> diretores, ArrayList<Ator> atores) {
+    public Filme(String id, String titulo, String descricao, String genero, Integer ano, String classificacao, ArrayList<String> diretores, ArrayList<String> atores) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
@@ -85,19 +82,19 @@ public class Filme {
         this.classificacao = classificacao;
     }
 
-    public ArrayList<Diretor> getDiretores() {
+    public ArrayList<String> getDiretores() {
         return diretores;
     }
 
-    public void setDiretores(ArrayList<Diretor> diretores) {
+    public void setDiretores(ArrayList<String> diretores) {
         this.diretores = diretores;
     }
 
-    public ArrayList<Ator> getAtores() {
+    public ArrayList<String> getAtores() {
         return atores;
     }
 
-    public void setAtores(ArrayList<Ator> atores) {
+    public void setAtores(ArrayList<String> atores) {
         this.atores = atores;
     }
 }

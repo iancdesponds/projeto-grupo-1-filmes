@@ -2,15 +2,21 @@ package br.insper.filmes.diretor;
 
 import java.util.List;
 import br.insper.filmes.filme.Filme;
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+@Document
 public class Diretor {
-    private Integer id;
+    @Id
+    private String id;
     private String nome;
     private String nacionalidade;
     private String biografia;
     private List<Filme> filmes;
 
-    public Diretor(Integer id, String nome, String nacionalidade, String biografia, List<Filme> filmes) {
+    public Diretor() {
+    }
+
+    public Diretor(String id, String nome, String nacionalidade, String biografia, List<Filme> filmes) {
         this.id = id;
         this.nome = nome;
         this.nacionalidade = nacionalidade;
@@ -18,11 +24,11 @@ public class Diretor {
         this.filmes = filmes;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
