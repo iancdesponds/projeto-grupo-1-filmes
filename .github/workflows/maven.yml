@@ -52,7 +52,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./Dockerfile
+        file: ./filmes/Dockerfile
         push: true
         tags: esthercaroline/projeto-grupo-1-filmes:${{ github.sha }}
     - name: executing remote ssh commands using password
