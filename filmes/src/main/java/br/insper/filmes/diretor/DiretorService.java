@@ -2,8 +2,10 @@ package br.insper.filmes.diretor;
 
 import br.insper.filmes.ator.Ator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +25,7 @@ public class DiretorService {
 
     public Optional<Diretor> buscarDiretorPorId(String id) {
         if (id == null || id.isEmpty()) {
-            throw new IllegalArgumentException("ID inválido.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id invalido");
         }
         return diretorRepository.findById(id);
     }
@@ -44,7 +46,7 @@ public class DiretorService {
 
     public boolean deletarDiretor(String id) {
         if (id == null || id.isEmpty()) {
-            throw new IllegalArgumentException("ID inválido.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id invalido");
         }
         if (diretorRepository.existsById(id)) {
             diretorRepository.deleteById(id);
@@ -55,13 +57,13 @@ public class DiretorService {
 
     private void validarDiretor(Diretor diretor) {
         if (!StringUtils.hasText(diretor.getNome()) || diretor.getNome().length() > 100) {
-            throw new IllegalArgumentException("Nome inválido ou muito longo.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome inválido ou muito longo.");
         }
         if (!StringUtils.hasText(diretor.getNacionalidade()) || diretor.getNacionalidade().length() > 50) {
-            throw new IllegalArgumentException("Nacionalidade inválida ou muito longa.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nacionalidade inválida ou muito longa.");
         }
         if (diretor.getFilmes() == null) {
-            throw new IllegalArgumentException("A lista de filmes não pode ser nula.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A lista de filmes não pode ser nula.");
         }
     }
 }

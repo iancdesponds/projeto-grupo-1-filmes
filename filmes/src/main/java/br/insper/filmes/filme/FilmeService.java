@@ -10,6 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import br.insper.filmes.avaliacao.Avaliacao;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.boot.SpringBootExceptionReporter;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,22 +47,30 @@ public class FilmeService {
         if (response.getStatusCode().is2xxSuccessful()) {
             return List.of(response.getBody());
         } else {
-            throw new RuntimeException("Erro ao buscar avaliações");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Avaliações não encontradas");
         }
     }
 
     public Filme criarFilme(Filme filme) {
         if (filme == null) {
-            throw new IllegalArgumentException("Filme não pode ser nulo");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Filme não pode ser nulo");
         }
 
-        if (filme.getTitulo() == null || filme.getAtores() == null || filme.getClassificacao() == null || filme.getDescricao() == null || filme.getDiretores() == null || filme.getGenero() == null || filme.getAno() == null) {
-            throw new IllegalArgumentException("Campos obrigatórios estão ausentes");
+        if (filme.getTitulo() == null || filme.getAtores() == null || filme.getClassificacao() == null ||
+                filme.getDescricao() == null || filme.getDiretores() == null || filme.getGenero() == null ||
+                filme.getAno() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Campos obrigatórios não preenchidos");
         }
 
         for( String diretor : filme.getDiretores()){
             if(diretorRepository.findById(diretor).isEmpty()){
-                throw new IllegalArgumentException("Diretor não encontrado");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Diretor não encontrado");
+            }
+        }
+
+        for( String ator : filme.getAtores()){
+            if(atorRepository.findById(ator).isEmpty()){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ator não encontrado");
             }
         }
 
@@ -67,11 +80,11 @@ public class FilmeService {
 
     public Filme buscarFilmePorId(String id) {
         if (id == null || id.isEmpty()) {
-            throw new IllegalArgumentException("ID inválido.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id inválido");
         }
         Optional<Filme> filme = filmeRepository.findById(id);
         if (filme.isEmpty()) {
-            throw new IllegalArgumentException("Filme não encontrado");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi possível encontrar o filme.");
         }
         return filme.get();
     }
@@ -79,7 +92,7 @@ public class FilmeService {
     public Filme editarFilme(Filme filme, String id){
         Optional<Filme> op = filmeRepository.findById(id);
         if (op.isEmpty()) {
-            throw new IllegalArgumentException("Filme não encontrado");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Filme não encontrado");
         }
         Filme filmeEditado = op.get();
         filmeEditado.setTitulo(filme.getTitulo());
@@ -95,7 +108,7 @@ public class FilmeService {
     public Filme deletarFilme(String id){
         Optional<Filme> op = filmeRepository.findById(id);
         if (op.isEmpty()) {
-            throw new RuntimeException("Filme não encontrado");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Filme não encontrado");
         }
         Filme filmeDeletado = op.get();
         filmeRepository.deleteById(id);
