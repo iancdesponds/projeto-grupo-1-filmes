@@ -42,11 +42,15 @@ public class FilmeService {
         return filmeRepository.save(filme);
     }
 
-    public Optional<Filme> buscarFilmePorId(String id) {
+    public Filme buscarFilmePorId(String id) {
         if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("ID inválido.");
         }
-        return filmeRepository.findById(id);
+        Optional<Filme> filme = filmeRepository.findById(id);
+        if (filme.isEmpty()) {
+            throw new IllegalArgumentException("Filme não encontrado");
+        }
+        return filme.get();
     }
 
     public Filme editarFilme(Filme filme, String id){
