@@ -62,8 +62,6 @@ public class DiretorService {
         if (!StringUtils.hasText(diretor.getNacionalidade()) || diretor.getNacionalidade().length() > 50) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nacionalidade inválida ou muito longa.");
         }
-        if (diretor.getFilmes() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A lista de filmes não pode ser nula.");
-        }
+
     }
 }

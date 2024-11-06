@@ -61,8 +61,5 @@ public class AtorService {
         if (!StringUtils.hasText(ator.getNacionalidade()) || ator.getNacionalidade().length() > 50) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome inválido ou muito longo.");
         }
-        if (ator.getFilmes() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A lista de filmes não pode ser nula.");
-        }
     }
 }
