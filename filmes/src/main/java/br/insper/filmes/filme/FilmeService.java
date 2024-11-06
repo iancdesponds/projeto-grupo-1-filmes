@@ -37,18 +37,23 @@ public class FilmeService {
     public List<Avaliacao> ListarAvaliacoes(String id, String jwtToken) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + jwtToken);
+        headers.set("Authorization", jwtToken);
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        ResponseEntity<Avaliacao[]> response = restTemplate.exchange("http://34.227.68.108:8080/avaliacao?idFilme=" +
-                id, HttpMethod.GET, entity, Avaliacao[].class);
-
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return List.of(response.getBody());
-        } else {
+        try{
+            
+            ResponseEntity<Avaliacao[]> response = restTemplate.exchange("http://34.227.68.108:8080/avaliacao?idFilme=" +
+                    id, HttpMethod.GET, entity, Avaliacao[].class);
+    
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return List.of(response.getBody());
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Avaliações não encontradas");
+            }
+        }catch(Exception e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Avaliações não encontradas");
         }
+        
     }
 
     public Filme criarFilme(Filme filme) {
