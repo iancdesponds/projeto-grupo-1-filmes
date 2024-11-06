@@ -1,6 +1,7 @@
 package br.insper.filmes.filme;
 
 import br.insper.filmes.ator.AtorRepository;
+import br.insper.filmes.diretor.Diretor;
 import br.insper.filmes.diretor.DiretorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -57,6 +58,7 @@ public class FilmeService {
     }
 
     public Filme criarFilme(Filme filme) {
+
         if (filme == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Filme não pode ser nulo");
         }
@@ -68,7 +70,7 @@ public class FilmeService {
         }
 
         for( String diretor : filme.getDiretores()){
-            if(diretorRepository.findById(diretor).isEmpty()){
+            if(diretorRepository.findById(diretor).isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Diretor não encontrado");
             }
         }
@@ -80,7 +82,36 @@ public class FilmeService {
         }
 
         filme.setId(UUID.randomUUID().toString());
-        return filmeRepository.save(filme);
+        Filme novoFilme = filmeRepository.save(filme);
+
+        // Atualizar os diretores
+        for (String diretorId : filme.getDiretores()) {
+            Optional<Diretor> diretorOptional = diretorRepository.findById(diretorId);
+            if (diretorOptional.isPresent()) {
+                Diretor diretor = diretorOptional.get();
+                List<Filme> filmes = diretor.getFilmes();
+                filmes.add(novoFilme);
+                diretor.setFilmes(filmes);
+                diretorRepository.save(diretor);
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Diretor não encontrado");
+            }
+        }
+        //atualizar atores
+        for (String atoresId : filme.getAtores()) {
+            Optional<Ator> atorOptional = diretorRepository.findById(atorId);
+            if (atorOptional.isPresent()) {
+                Ator ator = atorOptional.get();
+                List<Filme> filmes = ator.getFilmes();
+                filmes.add(novoFilme);
+                ator.setFilmes(filmes);
+                atorRepository.save(ator);
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ator não encontrado");
+            }
+        }
+
+        return novoFilme;
     }
 
     public Filme buscarFilmePorId(String id) {
