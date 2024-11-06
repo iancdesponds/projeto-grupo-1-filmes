@@ -91,6 +91,9 @@ public class FilmeService {
             if (diretorOptional.isPresent()) {
                 Diretor diretor = diretorOptional.get();
                 List<Filme> filmes = diretor.getFilmes();
+                if (filmes == null) {
+                    filmes = new ArrayList<>();
+                }
                 filmes.add(novoFilme);
                 diretor.setFilmes(filmes);
                 diretorRepository.save(diretor);
@@ -104,6 +107,9 @@ public class FilmeService {
             if (atorOptional.isPresent()) {
                 Ator ator = atorOptional.get();
                 List<Filme> filmes = ator.getFilmes();
+                if (filmes == null) {
+                    filmes = new ArrayList<>();
+                }
                 filmes.add(novoFilme);
                 ator.setFilmes(filmes);
                 atorRepository.save(ator);
