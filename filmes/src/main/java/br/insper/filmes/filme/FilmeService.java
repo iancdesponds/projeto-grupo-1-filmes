@@ -2,6 +2,7 @@ package br.insper.filmes.filme;
 
 import br.insper.filmes.ator.AtorRepository;
 import br.insper.filmes.diretor.Diretor;
+import br.insper.filmes.ator.Ator;
 import br.insper.filmes.diretor.DiretorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -98,8 +99,8 @@ public class FilmeService {
             }
         }
         //atualizar atores
-        for (String atoresId : filme.getAtores()) {
-            Optional<Ator> atorOptional = diretorRepository.findById(atorId);
+        for (String atorId : filme.getAtores()) {
+            Optional<Ator> atorOptional = atorRepository.findById(atorId);
             if (atorOptional.isPresent()) {
                 Ator ator = atorOptional.get();
                 List<Filme> filmes = ator.getFilmes();
