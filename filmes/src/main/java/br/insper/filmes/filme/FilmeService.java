@@ -116,7 +116,7 @@ public class FilmeService {
     }
 
     public List<Filme> listarFilmes(String genero, Integer ano, String nomeDiretor, String classificacao) {
-        ArrayList<Filme> filmesFiltrados = new ArrayList<>();
+        List<Filme> filmesFiltrados = filmeRepository.findAll();
         Stream<Filme> filmes = filmesFiltrados.stream();
         if (genero != null) {
             filmes = filmes.filter(filme -> filme.getGenero().equals(genero));
